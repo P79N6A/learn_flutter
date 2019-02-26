@@ -10,7 +10,8 @@ class FirstPage extends StatefulWidget {
   }
 }
 
-class _FirstPageState extends State<FirstPage> {
+class _FirstPageState extends State<FirstPage>
+    with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
 
   List items = new List();
@@ -19,6 +20,8 @@ class _FirstPageState extends State<FirstPage> {
   bool _hasMore = true;
   bool isLoading = false;
 
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -37,6 +40,7 @@ class _FirstPageState extends State<FirstPage> {
     super.dispose();
     _scrollController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return new RefreshIndicator(
@@ -44,8 +48,7 @@ class _FirstPageState extends State<FirstPage> {
         child: ListView.separated(
           controller: _scrollController,
           itemCount: items.length + 1,
-          separatorBuilder: (BuildContext context, int index) =>
-              Divider(
+          separatorBuilder: (BuildContext context, int index) => Divider(
                 color: Colors.grey,
                 height: 1,
               ),
@@ -124,7 +127,6 @@ class _FirstPageState extends State<FirstPage> {
     }
   }
 
-
   Future<List> httpRequest() async {
     final listObj = await requestApi(params: {'pageIndex': _pageIndex});
     _pageIndex = listObj['pageIndex'];
@@ -132,21 +134,22 @@ class _FirstPageState extends State<FirstPage> {
     return listObj['list'];
   }
 
-  Future<Map> requestApi({Map<String, dynamic>params}) async {
-    const url = 'https://timeline-merger-ms.juejin.im/v1/get_tag_entry?src=web&tagId=5a96291f6fb9a0535b535438';
+  Future<Map> requestApi({Map<String, dynamic> params}) async {
+    const url =
+        'https://timeline-merger-ms.juejin.im/v1/get_tag_entry?src=web&tagId=5a96291f6fb9a0535b535438';
     var pageIndex = (params is Map) ? params['pageIndex'] : 0;
-    final _param  = {'page':pageIndex,'pageSize':20,'sort':'rankIndex'};
+    final _param = {'page': pageIndex, 'pageSize': 20, 'sort': 'rankIndex'};
     var responseList = [];
-    var  pageTotal = 0;
+    var pageTotal = 0;
 
-    try{
+    try {
       var response = await NetUtils.get(url, params: _param);
       responseList = response['d']['entrylist'];
       pageTotal = response['d']['total'];
       if (!(pageTotal is int) || pageTotal <= 0) {
         pageTotal = 0;
       }
-    }catch(e){
+    } catch (e) {
       print("$e");
     }
     pageIndex += 1;
@@ -159,7 +162,11 @@ class _FirstPageState extends State<FirstPage> {
         // No specified type, handles all
       }
     }
-    Map<String, dynamic> result = {"list":resultList, 'total':pageTotal, 'pageIndex':pageIndex};
+    Map<String, dynamic> result = {
+      "list": resultList,
+      'total': pageTotal,
+      'pageIndex': pageIndex
+    };
     return result;
   }
 }
