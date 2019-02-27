@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_web/color.dart';
 import 'package:learn_web/view/Third-page.dart';
-import 'package:learn_web/view/first-page.dart';
+import 'package:learn_web/view/first/first-page.dart';
 import 'package:learn_web/view/fourth-page.dart';
 import 'package:learn_web/view/second-page.dart';
 

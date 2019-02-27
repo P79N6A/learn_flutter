@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:learn_web/color.dart';
 import 'package:learn_web/utils/net_utils.dart';
-import 'package:learn_web/view/first_page_item.dart';
+import 'package:learn_web/view/first/first_page_item.dart';
 
 class FirstPage extends StatefulWidget {
   @override
@@ -45,16 +46,12 @@ class _FirstPageState extends State<FirstPage>
   Widget build(BuildContext context) {
     return new RefreshIndicator(
         onRefresh: _refresh,
-        child: ListView.separated(
+        child: ListView.builder(
           controller: _scrollController,
           itemCount: items.length + 1,
-          separatorBuilder: (BuildContext context, int index) => Divider(
-                color: Colors.grey,
-                height: 1,
-              ),
           itemBuilder: (BuildContext context, int index) {
             if (index == items.length) {
-              return _LoadMoreWidget();
+              return _loadMoreWidget();
             } else {
               return _listViewItem(items[index]);
             }
@@ -62,7 +59,7 @@ class _FirstPageState extends State<FirstPage>
         ));
   }
 
-  Widget _LoadMoreWidget() {
+  Widget _loadMoreWidget() {
     if (_hasMore) {
       return Container(
           alignment: Alignment.center,
@@ -84,12 +81,36 @@ class _FirstPageState extends State<FirstPage>
   }
 
   Widget _listViewItem(item) {
-    return Container(
-      height: 40,
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.only(left: 16),
-      child: Text("${item.title}"),
-    );
+    return Card(
+        color: Color(whiteColor),
+        elevation: 4.0,
+        margin: EdgeInsets.only(top: 8, bottom: 8, left: 10, right: 10),
+        child: Container(
+          alignment: Alignment.centerLeft,
+          height: 70,
+          child: ListTile(
+              trailing: Icon(
+                Icons.keyboard_arrow_right,
+                color: Colors.grey,
+                size: 24.0,
+              ),
+              title: Text(
+                "${item.title}",
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Color(textColor1), fontSize: 15),
+              ),
+              subtitle: Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: Text(
+                  "${'👲'}:  ${item.username}",
+                  style: TextStyle(
+                    color: Color(textColor3),
+                    fontSize: 12,
+                  ),
+                ),
+              )),
+        ));
   }
 
   Future<Null> _refresh() async {
@@ -156,7 +177,7 @@ class _FirstPageState extends State<FirstPage>
     List resultList = new List();
     for (int i = 0; i < responseList.length; i++) {
       try {
-        FirstPageItem cellData = new FirstPageItem.fromJson(responseList[i]);
+        FirstPageBean cellData = new FirstPageBean.fromJson(responseList[i]);
         resultList.add(cellData);
       } catch (e) {
         // No specified type, handles all

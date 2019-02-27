@@ -6,7 +6,7 @@
 /// target: FirstPageItem
 
 
-class FirstPageItem {
+class FirstPageBean {
   bool hot;
   String isCollection;
   String tag;
@@ -17,7 +17,7 @@ class FirstPageItem {
   String createdTime;
   String detailUrl;
 
-  FirstPageItem(
+  FirstPageBean(
       {this.hot,
         this.tag,
         this.username,
@@ -28,12 +28,12 @@ class FirstPageItem {
         this.detailUrl,
         this.isCollection});
 
-  factory FirstPageItem.fromJson(Map<String, dynamic> json) {
+  factory FirstPageBean.fromJson(Map<String, dynamic> json) {
     String _tag = '';
     if(json['tags'].length>0){
       _tag = '${json['tags'][0]['title']}/';
     }
-    return FirstPageItem(
+    return FirstPageBean(
       hot: json['hot'],
       collectionCount: json['collectionCount'],
       commentCount: json['commentsCount'],
